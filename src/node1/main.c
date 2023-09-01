@@ -6,20 +6,30 @@
  */ 
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <stdbool.h>
+#define F_CPU 4915200 // Hz
+#include <util/delay.h> // Uses F_CPU
 
 #include "uart_driver.h"
 
-#define CLOCK_SPEED 4915200 // Hz
 #define BAUD_RATE 9600
 
 
 int main(void)
 {
-    uart_init(CLOCK_SPEED, BAUD_RATE);
+    uart_init(F_CPU, BAUD_RATE);
+
+	sei();
+	
+	char bytes[] = "Starting up";
+	uart_transmit((unsigned char*)bytes, 11);
+	unsigned char received[100];
+	size_t num_received = 0;
 	while (true) {
-		uart_transmit(uart_receive());
+		num_received = uart_receive(received, 100);
+		uart_transmit(received, num_received);
+		_delay_ms(100);
 	}
 }
-
 
