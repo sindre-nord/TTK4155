@@ -14,6 +14,7 @@
 #include <avr/io.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdio.h>
 
 /**
  * @brief Initialize UART
@@ -24,4 +25,6 @@
 void uart_init(uint32_t clock_speed, uint32_t baud_rate);
 void uart_transmit(unsigned char bytes[], size_t num_bytes);
 size_t uart_receive(unsigned char bytes_out[], size_t max_bytes);
+
+int uart_putchar(char c, FILE* stream);
 

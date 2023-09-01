@@ -66,3 +66,13 @@ size_t uart_receive(unsigned char bytes[], size_t max_bytes)
 	sei();
 	return bytes_read;
 }
+
+
+// Implementing printf
+int uart_putchar(char c, FILE* stream) {
+	if (c == '\n') {
+		uart_putchar('\r', stream);
+	}
+	uart_transmit((unsigned char*)&c, 1);
+	return 0;
+}

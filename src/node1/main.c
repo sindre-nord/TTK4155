@@ -19,11 +19,11 @@
 int main(void)
 {
     uart_init(F_CPU, BAUD_RATE);
+	stdout = fdevopen(uart_putchar, NULL);
 
 	sei();
 	
-	char bytes[] = "Starting up";
-	uart_transmit((unsigned char*)bytes, 11);
+	printf("Starting up...\n");
 	unsigned char received[100];
 	size_t num_received = 0;
 	while (true) {
