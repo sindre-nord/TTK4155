@@ -18,9 +18,11 @@
 
 int main(void)
 {
-    uart_init(F_CPU, BAUD_RATE);
+	MCUCR |= 1 << SRE; // Enable external memory
+	SFIOR |= 1 << XMM2; // Stop using PC7-PC4 for memory as they have JTAG connected (see Atmega datasheet table 4)
+	
 	stdout = fdevopen(uart_putchar, NULL);
-
+	uart_init(F_CPU, BAUD_RATE);
 	sei();
 	
 	printf("Starting up...\n");
