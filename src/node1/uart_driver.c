@@ -5,8 +5,8 @@
 
 #include "circular_buffer.h"
 
-static circular_buffer_t tx_buffer;
-static circular_buffer_t rx_buffer;
+static volatile circular_buffer_t tx_buffer;
+static volatile circular_buffer_t rx_buffer;
 
 void uart_init(uint32_t clock_speed, uint32_t baud_rate)
 {
@@ -70,9 +70,9 @@ size_t uart_receive(unsigned char bytes[], size_t max_bytes)
 
 // Implementing printf
 int uart_putchar(char c, FILE* stream) {
+	uart_transmit((unsigned char*)&c, 1);
 	if (c == '\n') {
 		uart_putchar('\r', stream);
 	}
-	uart_transmit((unsigned char*)&c, 1);
 	return 0;
 }

@@ -15,12 +15,14 @@ typedef struct
     void* tail;       // pointer to tail
 } circular_buffer_t;
 
-void cb_allocate(circular_buffer_t* cb, size_t capacity, size_t item_size);
-void cb_free(circular_buffer_t* cb);
-void cb_push_back(circular_buffer_t* cb, const void* item);
+void cb_allocate(volatile circular_buffer_t* cb, size_t capacity, size_t item_size);
+void cb_free(volatile circular_buffer_t* cb);
+void cb_push_back(volatile circular_buffer_t* cb, const void* item);
 
 typedef enum {
     CB_POP_SUCCESSFUL,
     CB_QUEUE_EMPTY
 } cb_pop_result_t;
-cb_pop_result_t cb_pop_front(circular_buffer_t* cb, void* item);
+cb_pop_result_t cb_pop_front(volatile circular_buffer_t* cb, void* item);
+
+void cb_test(void);
