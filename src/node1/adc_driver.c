@@ -30,6 +30,17 @@ void adc_init(void){
 		adc_base_address[channel] = shared_channel_config | channel;
 	}
 	
+	DDRD |= 1<<DDD4; // Output for clock signal to ADC
+	
+	OCR3AL = 0;
+	ICR3L = 1;
+	TCCR3A |= (1<<COM3A1); // Set compare output mode (table 53)
+	TCCR3B |= (1<<CS30); // Set prescale factor (table 58) to 1
+	
+	// Set mode wave-gen mode to 14 (Table 56)
+	TCCR3A |= (1<<WGM31);
+	TCCR3B |= (1<<WGM33)|(1<<WGM32);
+	
 	DDRE &= ~(1<<DDE0); // Connected to active low ADC BUSY signal
 }
 
