@@ -151,6 +151,12 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="player_input_driver.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="player_input_driver.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="uart_driver.c">
       <SubType>compile</SubType>
     </Compile>
