@@ -17,12 +17,16 @@
 #define MENU_ENTRY_MAX_CHARACTERS 20
 typedef struct menu menu_t;
 
+extern const unsigned char menu_text[20][MENU_ENTRY_MAX_CHARACTERS];
 
 
 //typedef char[MENU_MAX_ENTRIES][32] display_text_t;
 
 typedef struct {
-	unsigned char display_text[MENU_ENTRY_MAX_CHARACTERS];
+	//unsigned char display_text[MENU_ENTRY_MAX_CHARACTERS]; //PROGMEM;
+	const unsigned char* display_text;
+	menu_t* next_menu;
+	menu_t* parent_menu;
 } menu_entry_t;
 
 typedef struct menu {

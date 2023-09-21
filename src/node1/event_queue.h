@@ -18,6 +18,8 @@ typedef enum{
 	EVENT_JOY_CLICK,
 	EVENT_JOY_DOWN,
 	EVENT_JOY_UP,
+	EVENT_JOY_LEFT,
+	EVENT_JOY_RIGHT,
 } event_t;
 
 

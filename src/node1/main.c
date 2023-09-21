@@ -56,10 +56,14 @@ int main(void)
 	oled_clear();
 	
 	stdout = fdevopen(oled_putchar, NULL);
-	printf("ja");
-	stdout = fdevopen(oled_putchar, NULL);
-	oled_select_segment(0,0);
-	printf("nei");
+	oled_select_segment(5,10);
+	printf("Loading");
+	_delay_ms(500);
+	printf(".");
+	_delay_ms(500);
+	printf(".");
+	_delay_ms(500);
+	printf(".");
 	_delay_ms(1000);
 	
 	
@@ -67,41 +71,59 @@ int main(void)
 	
 	stdout = fdevopen(uart_putchar, NULL);
 	printf("Starting up...\n");
-	
-	stdout = fdevopen(oled_putchar, NULL);
-	stdout = fdevopen(uart_putchar, NULL);
 
-	//main_render();
-	//state_menu(0, 0);
-	//menu_render(0);
-	//oled_print("OLED print");
-
-	
 	fsm_t fsm_instance;
     fsm_t* fsm_pointer = &fsm_instance;
     
     fsm_initialize(fsm_pointer, state_menu);
     fsm_dispatch(fsm_pointer, EVENT_ENTRY);
 	_delay_ms(500);
-	fsm_dispatch(fsm_pointer, EVENT_JOY_DOWN);
-	_delay_ms(500);
-	fsm_dispatch(fsm_pointer, EVENT_JOY_DOWN);
-	_delay_ms(500);
-	fsm_dispatch(fsm_pointer, EVENT_JOY_DOWN);
+	
 	
 
 	unsigned char received[100];
 	size_t num_received = 0;
+	
+	//SRAM_test();
+	
+	joystick_direction_t joystick_direction;
 	while (true) {
-		continue;
-		num_received = uart_receive(received, 100);
-		if(num_received > 0) {
-			printf("Reading from ADC:\nChannel 0: %u\nChannel 1: %u\nChannel 2: %u\nChannel 3: %u\n\n", adc_read(0), adc_read(1), adc_read(2), adc_read(3));
-			printf("Joystick x: %i\n", read_joy_stick_axis(JOY_HORIZONTAL));
-			printf("Right slider: %u\n", read_slider(SLIDER_RIGHT));
+		
+		joystick_direction = get_joystick_direction();
+		
+		
+		
+		printf("Joystick: %i\n", joystick_direction);
+		
+		if(joystick_direction == UP){
+			printf("Up");
+			fsm_dispatch(fsm_pointer, EVENT_JOY_UP);
+		}else if(joystick_direction == DOWN){
+			printf("Down");
+			fsm_dispatch(fsm_pointer, EVENT_JOY_DOWN);
+		} else if(joystick_direction == RIGHT){
+			printf("Right");
+			fsm_dispatch(fsm_pointer, EVENT_JOY_RIGHT);
+		} else if(joystick_direction == LEFT){
+			printf("Left");
+			fsm_dispatch(fsm_pointer, EVENT_JOY_LEFT);
 		}
-		uart_transmit(received, num_received);
-		_delay_ms(100);
+		// } else if(joystick_direction == CLICK){
+		// 	printf("Click");
+		// 	fsm_dispatch(fsm_pointer, EVENT_JOY_CLICK);
+		// }
+		
+		_delay_ms(500);
+		
+		
+// 		num_received = uart_receive(received, 100);
+// 		if(num_received > 0) {
+// 			printf("Reading from ADC:\nChannel 0: %u\nChannel 1: %u\nChannel 2: %u\nChannel 3: %u\n\n", adc_read(0), adc_read(1), adc_read(2), adc_read(3));
+// 			printf("Joystick x: %i\n", read_joy_stick_axis(JOY_HORIZONTAL));
+// 			printf("Right slider: %u\n", read_slider(SLIDER_RIGHT));
+// 		}
+// 		uart_transmit(received, num_received);
+// 		_delay_ms(100);
 	}
 }
 

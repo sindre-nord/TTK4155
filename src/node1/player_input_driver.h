@@ -11,6 +11,20 @@ typedef enum {
 	ADC_CHANNEL3 = 3
 } adc_channel_t;
 
+typedef enum {
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT,
+	UP_LEFT,
+	UP_RIGHT,
+	DOWN_LEFT,
+	DOWN_RIGHT,
+	NEUTRAL
+} joystick_direction_t;
+
+
+
 // From the adc:
 // Returns a value between -128 to 127
 typedef enum {
@@ -28,3 +42,5 @@ uint8_t read_slider(slider_side_t side);
 // From IO
 int left_button(void);
 int right_button(void);
+
+joystick_direction_t get_joystick_direction(void);

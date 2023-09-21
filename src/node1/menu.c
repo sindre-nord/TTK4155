@@ -42,7 +42,31 @@ void menu_render(menu_t* menu_p) {
 		} else {
 			menu_clear_cursor();
 		}
-		printf(menu_p->entries[entry].display_text);
+		// Using progmem:
+		unsigned char buffer[MENU_ENTRY_MAX_CHARACTERS];
+		for (int i = 0; i < MENU_ENTRY_MAX_CHARACTERS; i++) {
+			buffer[i] = pgm_read_byte(&(menu_p->entries[entry].display_text[i]));
+			if (buffer[i] == '\0') {
+				break;
+			}
+		}
+		printf("%s", buffer);
+
+		// End progmeme shenanigans
+
+		//printf(menu_p->entries[entry].display_text); // Without using progmem
 	}
 	stdout = prior_stdout;
 }
+
+const unsigned char PROGMEM menu_text[20][MENU_ENTRY_MAX_CHARACTERS] = {
+	{"Play"},
+	{"Highscore"},
+	{"Settings"},
+	{"Credits"},
+	{"Exit"},
+	{"Play as Kalle"},
+	{"Play as Sindre"},
+	{"Kalle: 2000"},
+	{"Sindre: 9000"}
+};
