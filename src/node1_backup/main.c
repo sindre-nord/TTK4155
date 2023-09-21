@@ -79,7 +79,6 @@ int main(void)
 	unsigned char received[100];
 	size_t num_received = 0;
 	while (true) {
-		continue;
 		num_received = uart_receive(received, 100);
 		if(num_received > 0) {
 			printf("Reading from ADC:\nChannel 0: %u\nChannel 1: %u\nChannel 2: %u\nChannel 3: %u\n\n", adc_read(0), adc_read(1), adc_read(2), adc_read(3));
