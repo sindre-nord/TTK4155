@@ -72,9 +72,23 @@ int main(void)
 	stdout = fdevopen(uart_putchar, NULL);
 
 	//main_render();
-	state_menu(0, 0);
+	//state_menu(0, 0);
 	//menu_render(0);
 	//oled_print("OLED print");
+
+	
+	fsm_t fsm_instance;
+    fsm_t* fsm_pointer = &fsm_instance;
+    
+    fsm_initialize(fsm_pointer, state_menu);
+    fsm_dispatch(fsm_pointer, EVENT_ENTRY);
+	_delay_ms(500);
+	fsm_dispatch(fsm_pointer, EVENT_JOY_DOWN);
+	_delay_ms(500);
+	fsm_dispatch(fsm_pointer, EVENT_JOY_DOWN);
+	_delay_ms(500);
+	fsm_dispatch(fsm_pointer, EVENT_JOY_DOWN);
+	
 
 	unsigned char received[100];
 	size_t num_received = 0;
