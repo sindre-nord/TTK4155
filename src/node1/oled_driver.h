@@ -51,6 +51,10 @@ void oled_clear(void);
 
 int oled_putchar(char c, FILE* stream);
 
-void oled_print(char* str);
+void oled_display_loading_screen(void);
+
+extern FILE* oled_stdout;
+int oled_printf(const char *__fmt, ...);
+
 
 #endif /* OLED_DRIVER_H_ */

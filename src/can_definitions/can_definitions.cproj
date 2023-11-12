@@ -4,58 +4,44 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>7.0</ProjectVersion>
     <ToolchainName>com.Atmel.AVRGCC8.C</ToolchainName>
-    <ProjectGuid>dce6c7e3-ee26-4d79-826b-08594b9ad897</ProjectGuid>
+    <ProjectGuid>{fa5d4b6e-ad05-4aa2-8edb-28ebb2303699}</ProjectGuid>
     <avrdevice>ATmega162</avrdevice>
     <avrdeviceseries>none</avrdeviceseries>
-    <OutputType>Executable</OutputType>
+    <OutputType>StaticLibrary</OutputType>
     <Language>C</Language>
-    <OutputFileName>$(MSBuildProjectName)</OutputFileName>
-    <OutputFileExtension>.elf</OutputFileExtension>
+    <OutputFileName>lib$(MSBuildProjectName)</OutputFileName>
+    <OutputFileExtension>.a</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
-    <AssemblyName>node1</AssemblyName>
-    <Name>node1</Name>
-    <RootNamespace>node1</RootNamespace>
+    <AvrGccProjectExtensions>
+    </AvrGccProjectExtensions>
+    <AssemblyName>can_definitions</AssemblyName>
+    <Name>can_definitions</Name>
+    <RootNamespace>can_definitions</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <CacheFlash>true</CacheFlash>
     <ProgFlashFromRam>true</ProgFlashFromRam>
-    <RamSnippetAddress>0x20000000</RamSnippetAddress>
+    <RamSnippetAddress />
     <UncachedRange />
     <preserveEEPROM>true</preserveEEPROM>
-    <OverrideVtorValue>exception_table</OverrideVtorValue>
+    <OverrideVtorValue />
     <BootSegment>2</BootSegment>
     <ResetRule>0</ResetRule>
     <eraseonlaunchrule>0</eraseonlaunchrule>
     <EraseKey />
     <AsfFrameworkConfig>
       <framework-data xmlns="">
-        <options />
-        <configurations />
-        <files />
-        <documentation help="" />
-        <offline-documentation help="" />
-        <dependencies>
-          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.52.0" />
-        </dependencies>
-      </framework-data>
+  <options />
+  <configurations />
+  <files />
+  <documentation help="" />
+  <offline-documentation help="" />
+  <dependencies>
+    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.52.0" />
+  </dependencies>
+</framework-data>
     </AsfFrameworkConfig>
-    <avrtool>com.atmel.avrdbg.tool.atmelice</avrtool>
-    <avrtoolserialnumber>J41800001739</avrtoolserialnumber>
-    <avrdeviceexpectedsignature>0x1E9404</avrdeviceexpectedsignature>
-    <com_atmel_avrdbg_tool_atmelice>
-      <ToolOptions>
-        <InterfaceProperties>
-          <JtagDbgClock>200000</JtagDbgClock>
-        </InterfaceProperties>
-        <InterfaceName>JTAG</InterfaceName>
-      </ToolOptions>
-      <ToolType>com.atmel.avrdbg.tool.atmelice</ToolType>
-      <ToolNumber>J41800001739</ToolNumber>
-      <ToolName>Atmel-ICE</ToolName>
-    </com_atmel_avrdbg_tool_atmelice>
-    <avrtoolinterface>JTAG</avrtoolinterface>
-    <avrtoolinterfaceclock>200000</avrtoolinterfaceclock>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
@@ -87,11 +73,6 @@
       <Value>libm</Value>
     </ListValues>
   </avrgcc.linker.libraries.Libraries>
-  <avrgcc.linker.libraries.LibrarySearchPaths>
-    <ListValues>
-      <Value>Z:\TTK4155\src\node1</Value>
-    </ListValues>
-  </avrgcc.linker.libraries.LibrarySearchPaths>
   <avrgcc.assembler.general.IncludePaths>
     <ListValues>
       <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.7.374\include\</Value>
@@ -131,11 +112,6 @@
       <Value>libm</Value>
     </ListValues>
   </avrgcc.linker.libraries.Libraries>
-  <avrgcc.linker.libraries.LibrarySearchPaths>
-    <ListValues>
-      <Value>Z:\TTK4155\src\node1</Value>
-    </ListValues>
-  </avrgcc.linker.libraries.LibrarySearchPaths>
   <avrgcc.assembler.general.IncludePaths>
     <ListValues>
       <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.7.374\include\</Value>
@@ -146,106 +122,9 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="adc_driver.c">
+    <Compile Include="can_definitions.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="adc_driver.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="can.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="can.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="timer.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="circular_buffer.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="circular_buffer.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="event_queue.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="event_queue.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="fonts.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="fonts.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="hardware_tests.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="hardware_tests.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="main.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="mcp2515.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="mcp2515.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="menu.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="menu.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="oled_driver.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="oled_driver.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="player_input_driver.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="player_input_driver.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="spi.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="spi.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="states.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="states.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="state_machine.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="state_machine.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="timer.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="uart_driver.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="uart_driver.h">
-      <SubType>compile</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\can_definitions\can_definitions.cproj">
-      <Name>can_definitions</Name>
-      <Project>{fa5d4b6e-ad05-4aa2-8edb-28ebb2303699}</Project>
-      <Private>True</Private>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

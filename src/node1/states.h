@@ -14,5 +14,8 @@
 
 
 void state_menu(fsm_t* fsm_p, event_t current_event);
+void state_game_startup(fsm_t* fsm_p, event_t current_event);
+void state_game(fsm_t* fsm_p, event_t current_event);
+void state_game_over(fsm_t* fsm_p, event_t current_event);
 
 #endif /* STATE_H_ */

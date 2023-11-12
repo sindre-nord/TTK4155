@@ -46,6 +46,6 @@ void adc_init(void){
 
 uint8_t adc_read(uint8_t channel) {
 	adc_base_address[channel] = (1<<ADC_CONVERT_SINGLE) | channel;
-	while(!(PINE & 1<<PINE0)){PINE;/*Arbitrary instruction needed for the AVR to actually wait for the busy pin*/}
+	while(!(PINE & 1<<PINE0)){;/*Arbitrary instruction needed for the AVR to actually wait for the busy pin*/}
 	return adc_base_address[channel];
 }

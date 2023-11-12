@@ -26,6 +26,8 @@ void uart_init(uint32_t clock_speed, uint32_t baud_rate)
 	// Enable transmission and reception interrupts. This must be done after everything
 	// else is initialized to use the correct settings as this will start TX/RX immediately
 	UCSR0B |= (1<<RXCIE0)|(1<<TXCIE0);
+	
+	uart_stdout = fdevopen(uart_putchar, NULL);
 }
 
 ISR(USART0_TXC_vect)
@@ -68,8 +70,8 @@ size_t uart_receive(unsigned char bytes[], size_t max_bytes)
 	return bytes_read;
 }
 
+FILE* uart_stdout;
 
-// Implementing printf
 int uart_putchar(char c, FILE* stream) {
 	if (c == '\n') {
 		uart_putchar('\r', stream);

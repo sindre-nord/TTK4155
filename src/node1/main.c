@@ -8,113 +8,99 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdbool.h>
-#define F_CPU 4915200 // Hz
-#include <util/delay.h> // Uses F_CPU
+
+#include "../can_definitions/can_definitions.h"
 #include "adc_driver.h"
+#include "can.h"
+#include "event_queue.h"
 #include "oled_driver.h"
 #include "player_input_driver.h"
 #include "state_machine.h"
 #include "states.h"
+#include "timer.h"
 #include "uart_driver.h"
 #include "hardware_tests.h"
+#include "mcp2515.h"
 
 #define BAUD_RATE 9600
 
-#include "fonts.h"
 
-void main_render(void) {
-	//oled_clear();
-	//FILE* prior_stdout = stdout;
-	stdout = fdevopen(oled_putchar, NULL);
-	printf("Raaa tekst");
-// 	for (uint8_t entry = 0; entry < menu_p->num_entries; entry++) {
-// 		oled_select_segment(entry, 0);
-// 		if (entry == menu_p->selected_entry) {
-// 			menu_render_cursor();
-// 			} else {
-// 			menu_clear_cursor();
-// 		}
-// 		for (uint8_t i = 0; i<8;i++){
-// 			oled_putchar(menu_p->entries[entry].display_text[i], NULL);
-// 		}
-// 		//printf(menu_p->entries[entry].display_text);
-// 		//printf("Raa tekst");
-// 	}
-	//stdout = prior_stdout;
-}
 
 int main(void)
 {
 	MCUCR |= 1 << SRE; // Enable external memory
 	SFIOR |= 1 << XMM2; // Stop using PC7-PC4 for memory as they have JTAG connected (see Atmega datasheet table 4)
-
+	
+	// Debug trigger pin
+	//DDRB |= 1<<2;
+	//PORTB |= 1<<2;
+	//PORTB &= ~1<<2;
+	
+	timer_init();
 	uart_init(F_CPU, BAUD_RATE);
+	can_init();
 	sei();
 	adc_init();
 	oled_init();
 
-	oled_clear();
-	
-	stdout = fdevopen(oled_putchar, NULL);
-	oled_select_segment(5,10);
-	printf("Loading");
-	_delay_ms(500);
-	printf(".");
-	_delay_ms(500);
-	printf(".");
-	_delay_ms(500);
-	printf(".");
-	_delay_ms(1000);
-	
-	
-	
-	
-	stdout = fdevopen(uart_putchar, NULL);
+	stdout = uart_stdout;
 	printf("Starting up...\n");
 
-	fsm_t fsm_instance;
-    fsm_t* fsm_pointer = &fsm_instance;
-    
-    fsm_initialize(fsm_pointer, state_menu);
-    fsm_dispatch(fsm_pointer, EVENT_ENTRY);
-	_delay_ms(500);
+	oled_display_loading_screen();
+
+	stdout = uart_stdout;
+	unsigned char control_reg = mcp_read_addressed(MCP_REG_CAN_CONTROL);
+	printf("Can control register value: %u\n\n", control_reg);
+	
+
+/*
+	can_frame_t sent_frame = {.id=0b10101010101, .data_length=8};
+	for (uint8_t i = 0; i < sent_frame.data_length; i++) {
+		sent_frame.data[i] = i;
+	}
+	can_send(&sent_frame);
+	*/
 	
 	
 
-	unsigned char received[100];
-	size_t num_received = 0;
+
+
+	fsm_t fsm;
+
+	eq_initialize();
+    fsm_initialize(&fsm, state_menu);
+
+	event_t next_event;
+	//unsigned char received_uart[100];
+	//size_t num_received_uart = 0;
+	can_frame_t received_frames[1];
+	size_t num_received_frames = 0;
 	
-	//SRAM_test();
 	
-	joystick_direction_t joystick_direction;
 	while (true) {
-		
-		joystick_direction = get_joystick_direction();
-		
-		
-		
-		printf("Joystick: %i\n", joystick_direction);
-		
-		if(joystick_direction == UP){
-			printf("Up");
-			fsm_dispatch(fsm_pointer, EVENT_JOY_UP);
-		}else if(joystick_direction == DOWN){
-			printf("Down");
-			fsm_dispatch(fsm_pointer, EVENT_JOY_DOWN);
-		} else if(joystick_direction == RIGHT){
-			printf("Right");
-			fsm_dispatch(fsm_pointer, EVENT_JOY_RIGHT);
-		} else if(joystick_direction == LEFT){
-			printf("Left");
-			fsm_dispatch(fsm_pointer, EVENT_JOY_LEFT);
+		player_input_read_all();
+		num_received_frames = can_receive(received_frames, 1);
+		if (num_received_frames != 0) {
+			for (uint8_t i = 0; i < num_received_frames; i++) {
+				can_frame_t* received_frame = &received_frames[i];
+				switch (received_frame->id) {
+					case CAN_ID_GOAL_SCORED:
+						eq_push_event(EVENT_GOAL_SCORED);
+						break;
+					default:
+						printf("Received frame of ID %u and data length %u:\n", received_frame->id, received_frame->data_length);
+						for (uint8_t i = 0; i < received_frame->data_length; i++) {
+							printf("%u, ", received_frame->data[i]);
+						}
+						printf("\n");
+						break;
+				}
+				
+			}
 		}
-		// } else if(joystick_direction == CLICK){
-		// 	printf("Click");
-		// 	fsm_dispatch(fsm_pointer, EVENT_JOY_CLICK);
-		// }
-		
-		_delay_ms(500);
-		
+		if (eq_pop_next_event(&next_event) == CB_POP_SUCCESSFUL) {
+			fsm_dispatch(&fsm, next_event);
+		}
 		
 // 		num_received = uart_receive(received, 100);
 // 		if(num_received > 0) {

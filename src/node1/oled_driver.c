@@ -6,6 +6,7 @@
  */ 
 
 #include "oled_driver.h"
+#include "timer.h"
 
 #include <string.h>
 
@@ -38,6 +39,8 @@ void oled_init(void) {
 	oled_write_command(OLED_OUT_FOLLOWS_RAM_CONTENT);
 	oled_write_command(OLED_SET_NORMAL_DISPLAY);
 	oled_write_command(OLED_DISPLAY_ON);
+	
+	oled_stdout = fdevopen(oled_putchar, NULL);
 }
 
 void oled_write_command(oled_command_t command){
@@ -76,6 +79,22 @@ void oled_clear(void) {
 	}
 }
 
+void oled_display_loading_screen(void){
+	oled_clear();
+	stdout = oled_stdout;
+	oled_select_segment(5,10);
+	printf("Loading");
+	_delay_ms(500);
+	printf(".");
+	_delay_ms(500);
+	printf(".");
+	_delay_ms(500);
+	printf(".");
+	_delay_ms(1000);
+}
+
+FILE* oled_stdout;
+
 int oled_putchar(char c, FILE* stream) {
 	if (FONT_START_ASCII <= c && c <= FONT_END_ASCII) {
 		for (uint8_t i = 0; i < FONT_WIDTH_MEDIUM; i++) {
@@ -86,6 +105,11 @@ int oled_putchar(char c, FILE* stream) {
 	return 0;
 }
 
-void oled_print(char* str) {
-	printf(str);
-}
+
+//int oled_printf(const char *__fmt, ...){
+	//FILE* prior_stdout = stdout;
+	//stdout = oled_stdout;
+	//int out = printf(__fmt, ...);
+	//stdout = prior_stdout;
+	//return out;
+//}

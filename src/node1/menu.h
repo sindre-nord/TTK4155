@@ -13,27 +13,34 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include "event_queue.h"
+
 #define MENU_MAX_ENTRIES 8
 #define MENU_ENTRY_MAX_CHARACTERS 20
+#define MAX_AMOUNT_OF_MENUS 20
 typedef struct menu menu_t;
 
-extern const unsigned char menu_text[20][MENU_ENTRY_MAX_CHARACTERS];
+typedef enum {
+	MENU_TEXT_MAIN,
+	MENU_TEXT_PLAY,
+	MENU_TEXT_HIGHSCORE,
+	MENU_TEXT_CREDITS
+} menu_text_t;
 
-
-//typedef char[MENU_MAX_ENTRIES][32] display_text_t;
+//extern const unsigned char menu_text[20][MENU_ENTRY_MAX_CHARACTERS];
+extern const unsigned char menu_text[MAX_AMOUNT_OF_MENUS][MENU_MAX_ENTRIES][MENU_ENTRY_MAX_CHARACTERS];
+extern menu_t* selected_menu;
 
 typedef struct {
-	//unsigned char display_text[MENU_ENTRY_MAX_CHARACTERS]; //PROGMEM;
-	const unsigned char* display_text;
 	menu_t* next_menu;
-	menu_t* parent_menu;
+	event_t associated_event;
 } menu_entry_t;
 
 typedef struct menu {
-	//menu_t* parent_menu;
 	uint8_t num_entries;
 	uint8_t selected_entry;
-	//display_text_t* display_text_ptr;
+	menu_t* parent_menu;
+	const unsigned char (*display_text)[MENU_MAX_ENTRIES][MENU_ENTRY_MAX_CHARACTERS];
 	menu_entry_t entries[MENU_MAX_ENTRIES];
 } menu_t;
 

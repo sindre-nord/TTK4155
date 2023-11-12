@@ -1,12 +1,12 @@
 // Implementation based on https://stackoverflow.com/a/827749
 #include "circular_buffer.h"
 
+#include "timer.h"
+
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define F_CPU 4915200 // Hz
-#include <util/delay.h> // Uses F_CPU
 
 uint8_t cb_allocate(volatile circular_buffer_t* cb, size_t capacity, size_t item_size)
 {
